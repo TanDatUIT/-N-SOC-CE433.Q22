@@ -1,0 +1,54 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Mar 14 20:38:47 2026
+# Process ID: 8872
+# Current directory: C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent27108 C:\Users\tanda\Desktop\TanDatWorkSpace\HK2_2025-2026\SoC\Vivado\Median_Filter\Median_Filter\Median_Filter.xpr
+# Log file: C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/vivado.log
+# Journal file: C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter\vivado.jou
+# Running On: tandatASUS, OS: Windows, CPU Frequency: 2688 MHz, CPU Physical cores: 14, Host memory: 16823 MB
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.xpr
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav.wcfg] -no_script -reset -force -quiet
+remove_files  -fileset sim_1 C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav.wcfg
+launch_simulation
+source tb_median_filter.tcl
+launch_runs synth_1 -jobs 10
+wait_on_run synth_1
+launch_runs impl_1 -jobs 10
+wait_on_run impl_1
+close_sim
+launch_simulation
+source tb_median_filter.tcl
+save_wave_config {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg}
+add_files -fileset sim_1 -norecurse C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg
+set_property xsim.view {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav.wcfg C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg} [get_filesets sim_1]
+close_sim
+launch_simulation
+open_wave_config C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg
+source tb_median_filter.tcl
+add_bp {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} 297
+remove_bps -file {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} -line 297
+add_bp {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} 297
+remove_bps -file {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} -line 297
+add_bp {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} 297
+add_bp {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} 303
+current_wave_config {tb_median_filter_behav1.wcfg}
+add_wave {{/tb_median_filter/uut/register_stage9}} 
+save_wave_config {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg}
+close_sim
+launch_simulation
+open_wave_config C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg
+source tb_median_filter.tcl
+remove_bps -file {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} -line 297
+remove_bps -file {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/Median_Filter.srcs/sources_1/new/median_filter.v} -line 303
+close_sim
+launch_simulation
+open_wave_config C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg
+source tb_median_filter.tcl
+save_wave_config {C:/Users/tanda/Desktop/TanDatWorkSpace/HK2_2025-2026/SoC/Vivado/Median_Filter/Median_Filter/tb_median_filter_behav1.wcfg}
+close_sim
