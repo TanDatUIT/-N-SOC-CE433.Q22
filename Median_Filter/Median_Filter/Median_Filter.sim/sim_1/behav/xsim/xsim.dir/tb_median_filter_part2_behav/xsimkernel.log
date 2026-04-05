@@ -1,4 +1,0 @@
-Running: xsim.dir/tb_median_filter_part2_behav/xsimk.exe -simmode gui -wdb tb_median_filter_part2_behav.wdb -simrunnum 0 -socket 64259
-Design successfully loaded
-Design Loading Memory Usage: 9468 KB (Peak: 9468 KB)
-Design Loading CPU Usage: 0 ms

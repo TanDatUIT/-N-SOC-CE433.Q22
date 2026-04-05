@@ -1,9 +1,0 @@
-module swap(
-	input [7:0] Ai,Bi,
-	output [7:0] Ao, Bo
-);
-// A > B => SWAP => TANG DAN
-assign Ao = ( Ai > Bi)? Bi : Ai;
-assign Bo = (Ai > Bi)? Ai : Bi;
-
-endmodule
