@@ -1,0 +1,582 @@
+Analysis & Synthesis report for Median_Filter
+Thu Apr 02 09:20:35 2026
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. General Register Statistics
+  9. Port Connectivity Checks: "sort3:sort_final9"
+ 10. Port Connectivity Checks: "sort3:sort4_meds"
+ 11. Elapsed Time Per Partition
+ 12. Analysis & Synthesis Messages
+ 13. Analysis & Synthesis Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++--------------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                         ;
++------------------------------------+-------------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Thu Apr 02 09:20:35 2026           ;
+; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
+; Revision Name                      ; Median_Filter                                   ;
+; Top-level Entity Name              ; median_filter                                   ;
+; Family                             ; Cyclone II                                      ;
+; Total logic elements               ; 301                                             ;
+;     Total combinational functions  ; 298                                             ;
+;     Dedicated logic registers      ; 107                                             ;
+; Total registers                    ; 107                                             ;
+; Total pins                         ; 84                                              ;
+; Total virtual pins                 ; 0                                               ;
+; Total memory bits                  ; 0                                               ;
+; Embedded Multiplier 9-bit elements ; 0                                               ;
+; Total PLLs                         ; 0                                               ;
++------------------------------------+-------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                        ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                     ; Setting            ; Default Value      ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                     ; EP2C35F672C6       ;                    ;
+; Top-level entity name                                                      ; median_filter      ; Median_Filter      ;
+; Family name                                                                ; Cyclone II         ; Cyclone IV GX      ;
+; Use smart compilation                                                      ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                                ; Off                ; Off                ;
+; Restructure Multiplexers                                                   ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                                        ; Off                ; Off                ;
+; Preserve fewer node names                                                  ; On                 ; On                 ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                ; Off                ;
+; Verilog Version                                                            ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                               ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                   ; Auto               ; Auto               ;
+; Safe State Machine                                                         ; Off                ; Off                ;
+; Extract Verilog State Machines                                             ; On                 ; On                 ;
+; Extract VHDL State Machines                                                ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                          ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                 ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                             ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                                  ; On                 ; On                 ;
+; Parallel Synthesis                                                         ; On                 ; On                 ;
+; DSP Block Balancing                                                        ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                         ; On                 ; On                 ;
+; Power-Up Don't Care                                                        ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                               ; Off                ; Off                ;
+; Remove Duplicate Registers                                                 ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                       ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                     ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                      ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                       ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                        ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                ; Off                ;
+; Optimization Technique                                                     ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                         ; 70                 ; 70                 ;
+; Auto Carry Chains                                                          ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                       ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                ; Off                ;
+; Auto ROM Replacement                                                       ; On                 ; On                 ;
+; Auto RAM Replacement                                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                            ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                              ; On                 ; On                 ;
+; Strict RAM Replacement                                                     ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                          ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                     ; Off                ; Off                ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                      ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                              ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                          ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                    ; Off                ; Off                ;
+; Report Parameter Settings                                                  ; On                 ; On                 ;
+; Report Source Assignments                                                  ; On                 ; On                 ;
+; Report Connectivity Checks                                                 ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                ; Off                ;
+; Synchronization Register Chain Length                                      ; 2                  ; 2                  ;
+; PowerPlay Power Optimization                                               ; Normal compilation ; Normal compilation ;
+; HDL message level                                                          ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                            ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                ; 100                ;
+; Clock MUX Protection                                                       ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                ; Off                ; Off                ;
+; Block Design Naming                                                        ; Auto               ; Auto               ;
+; SDC constraint protection                                                  ; Off                ; Off                ;
+; Synthesis Effort                                                           ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                                       ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                                         ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                     ; On                 ; On                 ;
+; Synthesis Seed                                                             ; 1                  ; 1                  ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 20          ;
+; Maximum allowed            ; 14          ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processors 2-20        ;   0.0%      ;
++----------------------------+-------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                           ;
++----------------------------------+-----------------+------------------------+------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type              ; File Name with Absolute Path             ; Library ;
++----------------------------------+-----------------+------------------------+------------------------------------------+---------+
+; swap.v                           ; yes             ; User Verilog HDL File  ; D:/HOCTAP/CLAUDE/Verilog/swap.v          ;         ;
+; sort3.v                          ; yes             ; User Verilog HDL File  ; D:/HOCTAP/CLAUDE/Verilog/sort3.v         ;         ;
+; min3.v                           ; yes             ; User Verilog HDL File  ; D:/HOCTAP/CLAUDE/Verilog/min3.v          ;         ;
+; median_filter.v                  ; yes             ; User Verilog HDL File  ; D:/HOCTAP/CLAUDE/Verilog/median_filter.v ;         ;
+; max3.v                           ; yes             ; User Verilog HDL File  ; D:/HOCTAP/CLAUDE/Verilog/max3.v          ;         ;
++----------------------------------+-----------------+------------------------+------------------------------------------+---------+
+
+
++-----------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary         ;
++---------------------------------------------+-------+
+; Resource                                    ; Usage ;
++---------------------------------------------+-------+
+; Estimated Total logic elements              ; 301   ;
+;                                             ;       ;
+; Total combinational functions               ; 298   ;
+; Logic element usage by number of LUT inputs ;       ;
+;     -- 4 input functions                    ; 0     ;
+;     -- 3 input functions                    ; 279   ;
+;     -- <=2 input functions                  ; 19    ;
+;                                             ;       ;
+; Logic elements by mode                      ;       ;
+;     -- normal mode                          ; 155   ;
+;     -- arithmetic mode                      ; 143   ;
+;                                             ;       ;
+; Total registers                             ; 107   ;
+;     -- Dedicated logic registers            ; 107   ;
+;     -- I/O registers                        ; 0     ;
+;                                             ;       ;
+; I/O pins                                    ; 84    ;
+; Embedded Multiplier 9-bit elements          ; 0     ;
+; Maximum fan-out node                        ; clk   ;
+; Maximum fan-out                             ; 107   ;
+; Total fan-out                               ; 1393  ;
+; Average fan-out                             ; 2.85  ;
++---------------------------------------------+-------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                              ;
++----------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------+--------------+
+; Compilation Hierarchy Node ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                      ; Library Name ;
++----------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------+--------------+
+; |median_filter             ; 298 (104)         ; 107 (107)    ; 0           ; 0            ; 0       ; 0         ; 84   ; 0            ; |median_filter                           ; work         ;
+;    |max3:u_max_of_mins|    ; 17 (17)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|max3:u_max_of_mins        ; work         ;
+;    |min3:u_min_of_maxs|    ; 17 (17)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|min3:u_min_of_maxs        ; work         ;
+;    |sort3:sort0|           ; 26 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort0               ; work         ;
+;       |swap:s1|            ; 16 (16)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort0|swap:s1       ; work         ;
+;       |swap:s2|            ; 9 (9)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort0|swap:s2       ; work         ;
+;       |swap:s3|            ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort0|swap:s3       ; work         ;
+;    |sort3:sort1|           ; 26 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort1               ; work         ;
+;       |swap:s1|            ; 16 (16)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort1|swap:s1       ; work         ;
+;       |swap:s2|            ; 9 (9)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort1|swap:s2       ; work         ;
+;       |swap:s3|            ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort1|swap:s3       ; work         ;
+;    |sort3:sort2|           ; 26 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort2               ; work         ;
+;       |swap:s1|            ; 16 (16)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort2|swap:s1       ; work         ;
+;       |swap:s2|            ; 9 (9)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort2|swap:s2       ; work         ;
+;       |swap:s3|            ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort2|swap:s3       ; work         ;
+;    |sort3:sort4_meds|      ; 41 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort4_meds          ; work         ;
+;       |swap:s1|            ; 24 (24)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort4_meds|swap:s1  ; work         ;
+;       |swap:s2|            ; 16 (16)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort4_meds|swap:s2  ; work         ;
+;       |swap:s3|            ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort4_meds|swap:s3  ; work         ;
+;    |sort3:sort_final9|     ; 41 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort_final9         ; work         ;
+;       |swap:s1|            ; 24 (24)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort_final9|swap:s1 ; work         ;
+;       |swap:s2|            ; 16 (16)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort_final9|swap:s2 ; work         ;
+;       |swap:s3|            ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |median_filter|sort3:sort_final9|swap:s3 ; work         ;
++----------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 107   ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 104   ;
+; Number of registers using Asynchronous Clear ; 107   ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 0     ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++-----------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "sort3:sort_final9"                                                                   ;
++-------+--------+----------+-------------------------------------------------------------------------------------+
+; Port  ; Type   ; Severity ; Details                                                                             ;
++-------+--------+----------+-------------------------------------------------------------------------------------+
+; min_o ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; max_o ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------+
+; Port Connectivity Checks: "sort3:sort4_meds"       ;
++-------+--------+----------+------------------------+
+; Port  ; Type   ; Severity ; Details                ;
++-------+--------+----------+------------------------+
+; min_o ; Output ; Info     ; Explicitly unconnected ;
+; max_o ; Output ; Info     ; Explicitly unconnected ;
++-------+--------+----------+------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:00     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Analysis & Synthesis
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+    Info: Processing started: Thu Apr 02 09:20:31 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off Median_Filter -c Median_Filter
+Info (11104): Parallel Compilation has detected 20 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 14 of the 14 physical processors detected instead.
+Info (12021): Found 1 design units, including 1 entities, in source file system/synthesis/system.v
+    Info (12023): Found entity 1: system
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/system_2.v
+    Info (12023): Found entity 1: system_2
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_irq_clock_crosser.sv
+    Info (12023): Found entity 1: altera_irq_clock_crosser
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_irq_mapper.sv
+    Info (12023): Found entity 1: system_2_irq_mapper
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_avalon_st_handshake_clock_crosser.v
+    Info (12023): Found entity 1: altera_avalon_st_handshake_clock_crosser
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_avalon_st_clock_crosser.v
+    Info (12023): Found entity 1: altera_avalon_st_clock_crosser
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_avalon_st_pipeline_base.v
+    Info (12023): Found entity 1: altera_avalon_st_pipeline_base
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_width_adapter.sv
+    Info (12023): Found entity 1: altera_merlin_width_adapter
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_address_alignment.sv
+    Info (12023): Found entity 1: altera_merlin_address_alignment
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_burst_uncompressor.sv
+    Info (12023): Found entity 1: altera_merlin_burst_uncompressor
+Info (12021): Found 2 design units, including 2 entities, in source file system_2/synthesis/submodules/altera_merlin_arbitrator.sv
+    Info (12023): Found entity 1: altera_merlin_arbitrator
+    Info (12023): Found entity 2: altera_merlin_arb_adder
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_rsp_xbar_mux.sv
+    Info (12023): Found entity 1: system_2_rsp_xbar_mux
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_rsp_xbar_demux.sv
+    Info (12023): Found entity 1: system_2_rsp_xbar_demux
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_cmd_xbar_mux.sv
+    Info (12023): Found entity 1: system_2_cmd_xbar_mux
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_cmd_xbar_demux.sv
+    Info (12023): Found entity 1: system_2_cmd_xbar_demux
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_reset_controller.v
+    Info (12023): Found entity 1: altera_reset_controller
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_reset_synchronizer.v
+    Info (12023): Found entity 1: altera_reset_synchronizer
+Info (12021): Found 7 design units, including 7 entities, in source file system_2/synthesis/submodules/altera_merlin_burst_adapter.sv
+    Info (12023): Found entity 1: altera_merlin_burst_adapter_burstwrap_increment
+    Info (12023): Found entity 2: altera_merlin_burst_adapter_adder
+    Info (12023): Found entity 3: altera_merlin_burst_adapter_subtractor
+    Info (12023): Found entity 4: altera_merlin_burst_adapter_min
+    Info (12023): Found entity 5: altera_merlin_burst_adapter
+    Info (12023): Found entity 6: altera_merlin_burst_adapter_uncompressed_only
+    Info (12023): Found entity 7: altera_merlin_burst_adapter_full
+Info (12021): Found 2 design units, including 2 entities, in source file system_2/synthesis/submodules/system_2_id_router_005.sv
+    Info (12023): Found entity 1: system_2_id_router_005_default_decode
+    Info (12023): Found entity 2: system_2_id_router_005
+Info (12021): Found 2 design units, including 2 entities, in source file system_2/synthesis/submodules/system_2_id_router.sv
+    Info (12023): Found entity 1: system_2_id_router_default_decode
+    Info (12023): Found entity 2: system_2_id_router
+Info (12021): Found 2 design units, including 2 entities, in source file system_2/synthesis/submodules/system_2_addr_router.sv
+    Info (12023): Found entity 1: system_2_addr_router_default_decode
+    Info (12023): Found entity 2: system_2_addr_router
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_avalon_sc_fifo.v
+    Info (12023): Found entity 1: altera_avalon_sc_fifo
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_slave_agent.sv
+    Info (12023): Found entity 1: altera_merlin_slave_agent
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_master_agent.sv
+    Info (12023): Found entity 1: altera_merlin_master_agent
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_slave_translator.sv
+    Info (12023): Found entity 1: altera_merlin_slave_translator
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/altera_merlin_master_translator.sv
+    Info (12023): Found entity 1: altera_merlin_master_translator
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_hex.v
+    Info (12023): Found entity 1: system_2_HEX
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_led.v
+    Info (12023): Found entity 1: system_2_LED
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_key.v
+    Info (12023): Found entity 1: system_2_KEY
+Info (12021): Found 2 design units, including 2 entities, in source file system_2/synthesis/submodules/system_2_new_sdram_controller_0.v
+    Info (12023): Found entity 1: system_2_new_sdram_controller_0_input_efifo_module
+    Info (12023): Found entity 2: system_2_new_sdram_controller_0
+Info (12021): Found 3 design units, including 3 entities, in source file system_2/synthesis/submodules/system_2_altpll_0.v
+    Info (12023): Found entity 1: system_2_altpll_0_dffpipe_l2c
+    Info (12023): Found entity 2: system_2_altpll_0_stdsync_sv6
+    Info (12023): Found entity 3: system_2_altpll_0
+Info (12021): Found 5 design units, including 5 entities, in source file system_2/synthesis/submodules/system_2_jtag_uart_0.v
+    Info (12023): Found entity 1: system_2_jtag_uart_0_sim_scfifo_w
+    Info (12023): Found entity 2: system_2_jtag_uart_0_scfifo_w
+    Info (12023): Found entity 3: system_2_jtag_uart_0_sim_scfifo_r
+    Info (12023): Found entity 4: system_2_jtag_uart_0_scfifo_r
+    Info (12023): Found entity 5: system_2_jtag_uart_0
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_onchip_memory2_0.v
+    Info (12023): Found entity 1: system_2_onchip_memory2_0
+Info (12021): Found 21 design units, including 21 entities, in source file system_2/synthesis/submodules/system_2_nios2_qsys_0.v
+    Info (12023): Found entity 1: system_2_nios2_qsys_0_register_bank_a_module
+    Info (12023): Found entity 2: system_2_nios2_qsys_0_register_bank_b_module
+    Info (12023): Found entity 3: system_2_nios2_qsys_0_nios2_oci_debug
+    Info (12023): Found entity 4: system_2_nios2_qsys_0_ociram_sp_ram_module
+    Info (12023): Found entity 5: system_2_nios2_qsys_0_nios2_ocimem
+    Info (12023): Found entity 6: system_2_nios2_qsys_0_nios2_avalon_reg
+    Info (12023): Found entity 7: system_2_nios2_qsys_0_nios2_oci_break
+    Info (12023): Found entity 8: system_2_nios2_qsys_0_nios2_oci_xbrk
+    Info (12023): Found entity 9: system_2_nios2_qsys_0_nios2_oci_dbrk
+    Info (12023): Found entity 10: system_2_nios2_qsys_0_nios2_oci_itrace
+    Info (12023): Found entity 11: system_2_nios2_qsys_0_nios2_oci_td_mode
+    Info (12023): Found entity 12: system_2_nios2_qsys_0_nios2_oci_dtrace
+    Info (12023): Found entity 13: system_2_nios2_qsys_0_nios2_oci_compute_tm_count
+    Info (12023): Found entity 14: system_2_nios2_qsys_0_nios2_oci_fifowp_inc
+    Info (12023): Found entity 15: system_2_nios2_qsys_0_nios2_oci_fifocount_inc
+    Info (12023): Found entity 16: system_2_nios2_qsys_0_nios2_oci_fifo
+    Info (12023): Found entity 17: system_2_nios2_qsys_0_nios2_oci_pib
+    Info (12023): Found entity 18: system_2_nios2_qsys_0_nios2_oci_im
+    Info (12023): Found entity 19: system_2_nios2_qsys_0_nios2_performance_monitors
+    Info (12023): Found entity 20: system_2_nios2_qsys_0_nios2_oci
+    Info (12023): Found entity 21: system_2_nios2_qsys_0
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_nios2_qsys_0_jtag_debug_module_sysclk.v
+    Info (12023): Found entity 1: system_2_nios2_qsys_0_jtag_debug_module_sysclk
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_nios2_qsys_0_jtag_debug_module_tck.v
+    Info (12023): Found entity 1: system_2_nios2_qsys_0_jtag_debug_module_tck
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_nios2_qsys_0_jtag_debug_module_wrapper.v
+    Info (12023): Found entity 1: system_2_nios2_qsys_0_jtag_debug_module_wrapper
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_nios2_qsys_0_oci_test_bench.v
+    Info (12023): Found entity 1: system_2_nios2_qsys_0_oci_test_bench
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/system_2_nios2_qsys_0_test_bench.v
+    Info (12023): Found entity 1: system_2_nios2_qsys_0_test_bench
+Info (12021): Found 1 design units, including 1 entities, in source file system_2/synthesis/submodules/avalon_median_wrapper.v
+    Info (12023): Found entity 1: avalon_median_wrapper
+Info (12021): Found 1 design units, including 1 entities, in source file avalon_median_wrapper.v
+    Info (12023): Found entity 1: avalon_median_wrapper
+Info (12021): Found 1 design units, including 1 entities, in source file window3x3.v
+    Info (12023): Found entity 1: window3x3
+Info (12021): Found 1 design units, including 1 entities, in source file tb_switching_median.v
+    Info (12023): Found entity 1: tb_switching_median
+Info (12021): Found 1 design units, including 1 entities, in source file tb_sort3.v
+    Info (12023): Found entity 1: tb_sort3
+Info (12021): Found 1 design units, including 1 entities, in source file tb_median_filter.v
+    Info (12023): Found entity 1: tb_median_filter
+Info (12021): Found 1 design units, including 1 entities, in source file tb_image_median_cascade.v
+    Info (12023): Found entity 1: tb_image_median_cascade
+Info (12021): Found 1 design units, including 1 entities, in source file tb_image_median.v
+    Info (12023): Found entity 1: tb_image_median
+Info (12021): Found 1 design units, including 1 entities, in source file swap.v
+    Info (12023): Found entity 1: swap
+Info (12021): Found 1 design units, including 1 entities, in source file sort3.v
+    Info (12023): Found entity 1: sort3
+Info (12021): Found 1 design units, including 1 entities, in source file min3.v
+    Info (12023): Found entity 1: min3
+Info (12021): Found 1 design units, including 1 entities, in source file median_filter_top.v
+    Info (12023): Found entity 1: median_filter_top
+Info (12021): Found 1 design units, including 1 entities, in source file median_filter_cascade.v
+    Info (12023): Found entity 1: median_filter_cascade
+Info (12021): Found 1 design units, including 1 entities, in source file median_filter.v
+    Info (12023): Found entity 1: median_filter
+Info (12021): Found 1 design units, including 1 entities, in source file max3.v
+    Info (12023): Found entity 1: max3
+Info (12021): Found 1 design units, including 1 entities, in source file soc_top.v
+    Info (12023): Found entity 1: soc_top
+Warning (10037): Verilog HDL or VHDL warning at system_2_nios2_qsys_0.v(1567): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_nios2_qsys_0.v(1569): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_nios2_qsys_0.v(1725): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_nios2_qsys_0.v(2553): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_new_sdram_controller_0.v(316): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_new_sdram_controller_0.v(326): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_new_sdram_controller_0.v(336): conditional expression evaluates to a constant
+Warning (10037): Verilog HDL or VHDL warning at system_2_new_sdram_controller_0.v(680): conditional expression evaluates to a constant
+Info (12127): Elaborating entity "median_filter" for the top level hierarchy
+Info (12128): Elaborating entity "sort3" for hierarchy "sort3:sort0"
+Info (12128): Elaborating entity "swap" for hierarchy "sort3:sort0|swap:s1"
+Info (12128): Elaborating entity "max3" for hierarchy "max3:u_max_of_mins"
+Info (12128): Elaborating entity "min3" for hierarchy "min3:u_min_of_maxs"
+Warning (20013): Ignored assignments for entity "altera_avalon_sc_fifo" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_sc_fifo -entity altera_avalon_sc_fifo -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_avalon_sc_fifo -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_avalon_sc_fifo -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_avalon_st_handshake_clock_crosser" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_st_handshake_clock_crosser -entity altera_avalon_st_handshake_clock_crosser -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_avalon_st_handshake_clock_crosser -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_avalon_st_handshake_clock_crosser -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_irq_clock_crosser" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_irq_clock_crosser -entity altera_irq_clock_crosser -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_irq_clock_crosser -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_irq_clock_crosser -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_merlin_burst_adapter" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_burst_adapter -entity altera_merlin_burst_adapter -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_merlin_burst_adapter -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_merlin_burst_adapter -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_merlin_master_agent" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_master_agent -entity altera_merlin_master_agent -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_merlin_master_agent -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_merlin_master_agent -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_merlin_master_translator" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_master_translator -entity altera_merlin_master_translator -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_merlin_master_translator -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_merlin_master_translator -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_merlin_slave_agent" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_slave_agent -entity altera_merlin_slave_agent -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_merlin_slave_agent -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_merlin_slave_agent -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_merlin_slave_translator" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_slave_translator -entity altera_merlin_slave_translator -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_merlin_slave_translator -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_merlin_slave_translator -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_merlin_width_adapter" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_width_adapter -entity altera_merlin_width_adapter -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_merlin_width_adapter -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_merlin_width_adapter -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "altera_reset_controller" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_reset_controller -entity altera_reset_controller -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity altera_reset_controller -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity altera_reset_controller -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME Qsys -entity system_2 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0sp1 -entity system_2 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name SLD_INFO "QSYS_NAME system_2 HAS_SOPCINFO 1 GENERATION_ID 1774980029" -entity system_2 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_HEX" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_pio -entity system_2_HEX -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0.1.99.2 -entity system_2_HEX -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_HEX -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_KEY" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_pio -entity system_2_KEY -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0.1.99.2 -entity system_2_KEY -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_KEY -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_LED" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_pio -entity system_2_LED -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0.1.99.2 -entity system_2_LED -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_LED -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_addr_router" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_router -entity system_2_addr_router -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_addr_router -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_addr_router -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_altpll_0" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altpll -entity system_2_altpll_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_altpll_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_altpll_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_cmd_xbar_demux" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_demultiplexer -entity system_2_cmd_xbar_demux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_cmd_xbar_demux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_cmd_xbar_demux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_cmd_xbar_mux" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_multiplexer -entity system_2_cmd_xbar_mux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_cmd_xbar_mux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_cmd_xbar_mux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_id_router" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_router -entity system_2_id_router -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_id_router -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_id_router -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_id_router_005" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_router -entity system_2_id_router_005 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_id_router_005 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_id_router_005 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_irq_mapper" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_irq_mapper -entity system_2_irq_mapper -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_irq_mapper -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_irq_mapper -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_jtag_uart_0" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_jtag_uart -entity system_2_jtag_uart_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0.1.99.2 -entity system_2_jtag_uart_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_jtag_uart_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_new_sdram_controller_0" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_new_sdram_controller -entity system_2_new_sdram_controller_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0.1.99.2 -entity system_2_new_sdram_controller_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_new_sdram_controller_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_nios2_qsys_0" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_nios2_qsys -entity system_2_nios2_qsys_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_nios2_qsys_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_nios2_qsys_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_onchip_memory2_0" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_avalon_onchip_memory2 -entity system_2_onchip_memory2_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0.1.99.2 -entity system_2_onchip_memory2_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_onchip_memory2_0 -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_rsp_xbar_demux" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_demultiplexer -entity system_2_rsp_xbar_demux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_rsp_xbar_demux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_rsp_xbar_demux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Warning (20013): Ignored assignments for entity "system_2_rsp_xbar_mux" -- entity does not exist in design
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_NAME altera_merlin_multiplexer -entity system_2_rsp_xbar_mux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_VERSION 13.0 -entity system_2_rsp_xbar_mux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+    Warning (20014): Assignment for entity set_global_assignment -name IP_TOOL_ENV Qsys -entity system_2_rsp_xbar_mux -qip system_2/synthesis/system_2.qip -library system_2 was ignored
+Info (144001): Generated suppressed messages file D:/HOCTAP/CLAUDE/Verilog/output_files/Median_Filter.map.smsg
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 409 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 75 input pins
+    Info (21059): Implemented 9 output pins
+    Info (21061): Implemented 325 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 117 warnings
+    Info: Peak virtual memory: 4651 megabytes
+    Info: Processing ended: Thu Apr 02 09:20:35 2026
+    Info: Elapsed time: 00:00:04
+    Info: Total CPU time (on all processors): 00:00:02
+
+
++------------------------------------------+
+; Analysis & Synthesis Suppressed Messages ;
++------------------------------------------+
+The suppressed messages can be found in D:/HOCTAP/CLAUDE/Verilog/output_files/Median_Filter.map.smsg.
+
+

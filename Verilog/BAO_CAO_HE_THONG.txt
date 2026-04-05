@@ -1,0 +1,399 @@
+================================================================================
+     BÁO CÁO HỆ THỐNG: SWITCHING MEDIAN FILTER TRÊN FPGA DE2
+     Môn: CE433 - SoC Design | Sinh viên: UIT
+     Thiết bị: Cyclone II EP2C35F672C6 (DE2 Board)
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+1. TỔNG QUAN HỆ THỐNG
+────────────────────────────────────────────────────────────────────────────────
+
+Hệ thống thực hiện lọc nhiễu muối tiêu (salt-and-pepper) trên ảnh grayscale
+256×256 pixel bằng thuật toán Switching Median Filter 3×3, triển khai trên FPGA
+DE2 với kiến trúc SoC tích hợp NIOS II soft-core processor.
+
+Luồng xử lý tổng thể:
+  [Python] → tạo ảnh nhiễu (noisy_image.hex)
+      ↓
+  [NIOS II] → đọc ảnh từ SDRAM → gửi pixel vào filter IP
+      ↓
+  [Switching Median Filter IP] → lọc nhiễu → trả kết quả
+      ↓
+  [NIOS II] → đọc output → lưu vào SDRAM
+      ↓
+  [Python/final.py] → so sánh golden vs hardware → tính PSNR
+
+
+────────────────────────────────────────────────────────────────────────────────
+2. KIẾN TRÚC PHẦN CỨNG (HARDWARE ARCHITECTURE)
+────────────────────────────────────────────────────────────────────────────────
+
+2.1 Sơ đồ hệ thống Qsys
+─────────────────────────
+                  CLOCK_50 (50 MHz)
+                       │
+                    ┌──▼──┐
+                    │ PLL │  (ALTPLL)
+                    └──┬──┘
+              c0 100MHz │    c1 100MHz -3ns
+                ┌───────┴──────────────────────┐
+                │                              │
+         ┌──────▼────────────────────────┐    DRAM_CLK (pin AA7)
+         │     Avalon Interconnect       │
+         │         (100 MHz)             │
+         └─┬──────┬──────┬────┬──────┬──┘
+           │      │      │    │      │
+      ┌────▼─┐ ┌──▼──┐ ┌─▼──┐ ┌─▼──┐ ┌▼────────┐
+      │NIOS  │ │On-  │ │SDRAM│ │MY  │ │JTAG    │
+      │II    │ │Chip │ │Ctrl │ │IP_0│ │UART_0  │
+      │Tiny  │ │RAM  │ │     │ │    │ │        │
+      └──────┘ │32KB │ │8MB  │ └────┘ └────────┘
+               └─────┘ └──┬──┘
+                           │ Avalon wire
+                      ┌────▼────────────────────┐
+                      │ IS42S16400 SDRAM (8 MB) │
+                      │ DRAM_ADDR[11:0]          │
+                      │ DRAM_DQ[15:0]            │
+                      │ DRAM_BA_0, DRAM_BA_1     │
+                      └─────────────────────────┘
+
+2.2 Các module trong Qsys
+──────────────────────────
+  ┌─────────────────────────────────────────────────────────────────┐
+  │ Module            │ Chức năng                                   │
+  ├─────────────────────────────────────────────────────────────────┤
+  │ clk_0             │ Clock source 50 MHz từ CLOCK_50 pin         │
+  │ altpll_0          │ PLL: 50→100 MHz (c0 system, c1 SDRAM)      │
+  │ nios2_qsys_0      │ NIOS II Tiny soft-core processor            │
+  │ onchip_memory2_0  │ On-chip SRAM 32 KB (boot code, stack)      │
+  │ new_sdram_ctrl_0  │ SDRAM controller cho IS42S16400 8 MB        │
+  │ MY_IP_0           │ Switching Median Filter (Avalon-MM Slave)   │
+  │ jtag_uart_0       │ JTAG UART (printf qua USB-Blaster)          │
+  └─────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────
+3. SDRAM - HOẠT ĐỘNG CHI TIẾT
+────────────────────────────────────────────────────────────────────────────────
+
+3.1 Thông số chip IS42S16400 (DE2 board)
+──────────────────────────────────────────
+  Chip:           ISSI IS42S16400J
+  Tổ chức:        1M × 16bit × 4 banks = 8 MB
+  Data width:     16 bit (DRAM_DQ[15:0])
+  Địa chỉ row:    12 bit (A[11:0]) → 4096 rows/bank
+  Địa chỉ col:    8 bit (A[7:0])  → 256 columns
+  Banks:          4 (BA_0, BA_1)
+  CAS Latency:    3 clock cycles
+  Refresh:        4096 rows / 64 ms = 15.625 µs/refresh
+
+3.2 Cấu hình SDRAM Controller trong Qsys
+──────────────────────────────────────────
+  Parameter          │ Giá trị
+  ───────────────────┼─────────
+  dataWidth          │ 16 bit
+  rowWidth           │ 12 bit
+  columnWidth        │ 8 bit
+  numberOfBanks      │ 4
+  casLatency         │ 3
+  refreshPeriod      │ 15.625 µs
+  clockRate          │ 100 MHz
+  t_rcd (RAS→CAS)    │ 20 ns  = 2 clocks @ 100 MHz
+  t_rp  (precharge)  │ 20 ns  = 2 clocks
+  t_rfc (refresh)    │ 70 ns  = 7 clocks
+
+3.3 Clock PLL cho SDRAM
+─────────────────────────
+  Vấn đề: SDRAM yêu cầu clock đến pin DRAM_CLK phải TRƯỚC dữ liệu
+  (để chip lấy mẫu đúng thời điểm).
+
+  Giải pháp: PLL tạo 2 output:
+    c0 = 100 MHz, phase 0°     → clock cho toàn bộ logic nội bộ
+    c1 = 100 MHz, phase -3 ns  → DRAM_CLK pin (lệch pha -3 ns so với c0)
+
+  Ý nghĩa phase shift -3 ns:
+    ┌─ c0 (nội bộ) ─────┐     ┌─────────────
+    │                   │     │
+    ┘                   └─────┘
+         ┌─ c1 (DRAM_CLK) ─────┐     ┌──────
+         │  ←3ns→              │     │
+         ┘                     └─────┘
+
+  Chip SDRAM lấy mẫu tín hiệu theo cạnh lên của DRAM_CLK.
+  Tín hiệu ADDR/CMD được phát ra từ FPGA theo c0, đến SDRAM chip
+  sau ~2-3 ns trễ PCB trace. Phase shift -3 ns đảm bảo setup time
+  cho SDRAM được thỏa mãn.
+
+3.4 Memory Map sau Qsys generate
+──────────────────────────────────
+  ┌──────────────────────────────────────────────────────────┐
+  │ Component              │ Base       │ End        │ Size  │
+  ├──────────────────────────────────────────────────────────┤
+  │ SDRAM (new_sdram_ctrl) │ 0x0800000  │ 0x0FFFFFF  │ 8 MB  │
+  │ On-chip RAM            │ 0x1008000  │ 0x100FFFF  │ 32 KB │
+  │ NIOS II JTAG debug     │ 0x1010800  │ 0x1010FFF  │ 2 KB  │
+  │ PLL slave              │ 0x1011020  │ 0x101102F  │ 16 B  │
+  │ MY_IP_0 (filter)       │ 0x1011030  │ 0x101103F  │ 16 B  │
+  │ JTAG UART              │ 0x1011048  │ 0x101104F  │ 8 B   │
+  └──────────────────────────────────────────────────────────┘
+
+  Reset vector:     0x1008000  (on-chip RAM → boot nhanh)
+  Exception vector: 0x1008020  (on-chip RAM)
+  Linker đặt heap/stack/data vào SDRAM (0x0800000) tự động khi SDRAM
+  là vùng nhớ lớn nhất.
+
+3.5 Tại sao cần SDRAM?
+──────────────────────
+  Bộ nhớ cần cho xử lý ảnh 256×256:
+    input_img[256×256]  = 65,536 bytes  = 64 KB
+    output_img[254×254] = 64,516 bytes  ≈ 63 KB
+    Tổng:               ≈ 127 KB
+
+  On-chip RAM chỉ có 32 KB → không đủ → ứng dụng lỗi linker:
+    "address 0x32cec of .bss is not within region onchip_memory2_0"
+
+  SDRAM 8 MB >> 127 KB → dư thừa, cho phép xử lý ảnh đầy đủ.
+
+3.6 Giao tiếp SDRAM qua Avalon-MM
+────────────────────────────────────
+  NIOS II → Avalon bus → SDRAM Controller → DRAM pins
+
+  Chu kỳ đọc SDRAM (CAS Latency = 3):
+    Cycle 1: ACTIVATE (mở row)
+    Cycle 2: READ command (gửi column addr)
+    Cycle 3: (wait)
+    Cycle 4: (wait)
+    Cycle 5: Data valid trên DQ[15:0]
+
+  Chu kỳ ghi SDRAM:
+    Cycle 1: ACTIVATE (mở row)
+    Cycle 2: WRITE command + data DQ[15:0]
+    Cycle 3: Data được chốt
+
+  Waitrequest: Controller báo NIOS II stall khi SDRAM bận
+  (burst access, refresh, bank activate).
+
+
+────────────────────────────────────────────────────────────────────────────────
+4. SWITCHING MEDIAN FILTER IP - HOẠT ĐỘNG
+────────────────────────────────────────────────────────────────────────────────
+
+4.1 Nguyên lý Switching Median Filter
+──────────────────────────────────────
+  Khác với Standard Median Filter (lọc tất cả pixel), Switching Median
+  chỉ lọc pixel nghi là nhiễu:
+
+    IF pixel == 0 OR pixel == 255:
+        output = median(3×3 window)   ← bị nhiễu → lọc
+    ELSE:
+        output = pixel                ← sạch → giữ nguyên
+
+  Ưu điểm:
+    - Bảo toàn chi tiết ảnh (edges, textures)
+    - PSNR cao hơn: 34.96 dB vs 27 dB (standard median)
+    - Logic đơn giản hơn (không cần sorting đầy đủ khi bypass)
+
+4.2 Pipeline 3 stage
+──────────────────────
+  Stage 1: Sort các cột
+    sort3(row0_c0,row1_c0,row2_c0) → col_min[0], col_med[0], col_max[0]
+    sort3(row0_c1,row1_c1,row2_c1) → col_min[1], col_med[1], col_max[1]
+    sort3(row0_c2,row1_c2,row2_c2) → col_min[2], col_med[2], col_max[2]
+
+  Stage 2: Lấy min của max, max của min
+    max_of_mins = max3(col_min[0], col_min[1], col_min[2])
+    min_of_maxs = min3(col_max[0], col_max[1], col_max[2])
+
+  Stage 3: Median = median3(max_of_mins, col_med[1], min_of_maxs)
+
+  Latency: 3 clock cycles
+  Throughput: 1 pixel/clock = 100 Mpixels/s
+
+4.3 Window 3×3 (window3x3.v)
+───────────────────────────────
+  Dùng 2 line buffer (M4K BRAM) lưu 2 hàng trước:
+
+    Pixel stream → ┌──────────┐ → row2 (current)
+                   │ Line     │ → row1 (1 row trước)
+                   │ Buffer   │ → row0 (2 rows trước)
+                   └──────────┘
+  Output: 9 pixel (3×3 window) mỗi clock
+  Size: 256 pixels × 8 bit = 2048 bits per buffer = 1 M4K block
+
+4.4 Avalon-MM Register Map (MY_IP_0)
+──────────────────────────────────────
+  Base address: 0x1011030
+
+  Offset │ R/W │ Tên         │ Mô tả
+  ───────┼─────┼─────────────┼──────────────────────────────────
+  0x00   │  W  │ DATA_IN     │ Ghi pixel đầu vào (8-bit)
+  0x00   │  R  │ DATA_OUT    │ Đọc pixel đã lọc (8-bit)
+  0x04   │  R  │ STATUS      │ [0]=not_empty, [1]=full, [8]=done
+  0x08   │  W  │ CONTROL     │ [0]=reset
+  0x0C   │  R  │ OUT_COUNT   │ Số pixel output đã có
+
+
+────────────────────────────────────────────────────────────────────────────────
+5. LUỒNG PHẦN MỀM NIOS II (median_filter_main.c)
+────────────────────────────────────────────────────────────────────────────────
+
+  main()
+   │
+   ├─ 1. generate_test_image()
+   │       Tạo ảnh 256×32 gradient + nhiễu muối tiêu ngẫu nhiên
+   │       Lưu vào input_img[] (đặt trong SDRAM bởi linker)
+   │
+   ├─ 2. filter_reset()
+   │       Ghi CONTROL[0]=1 → reset FIFO và pipeline
+   │       Ghi CONTROL[0]=0 → bắt đầu nhận pixel
+   │
+   ├─ 3. run_filter()
+   │       Loop ghi từng pixel vào DATA_IN (0x1011030)
+   │       Kiểm tra STATUS[1] (FULL) trước khi ghi
+   │       Song song: kiểm tra STATUS[0] (NOT_EMPTY) → đọc DATA_OUT
+   │       Lưu vào output_img[] (cũng trong SDRAM)
+   │
+   ├─ 4. print_results()
+   │       In 20 pixel đầu ra JTAG UART (hiện trong Eclipse Console)
+   │       So sánh input vs output, đánh dấu pixel bị lọc
+   │
+   └─ 5. (optional) dump_output_hex()
+           Xuất output_img[] sang hex format để Python verify
+
+
+────────────────────────────────────────────────────────────────────────────────
+6. KẾT QUẢ TỔNG HỢP (SYNTHESIS RESULTS)
+────────────────────────────────────────────────────────────────────────────────
+
+6.1 Standalone Filter Core (median_filter_top.v)
+──────────────────────────────────────────────────
+  Metric              │ Giá trị        │ % of Device
+  ────────────────────┼────────────────┼────────────
+  Logic Elements (LE) │ 3,073          │ 9.2%
+  Dedicated Registers │ 2,310          │ 7.0%
+  Memory bits         │ 2,048          │ 0.4%
+  Fmax                │ 108 MHz        │ —
+  Throughput          │ 108 Mpixels/s  │ —
+  Latency             │ 3 clock cycles │ —
+  Power (total)       │ 144.39 mW      │ —
+  Power (dynamic)     │ 28.80 mW       │ —
+
+  ADP = 3,073 LE × (1/108 MHz) = 3,073 × 9.26 ns = 28,456 LE·ns
+  PDP = 28.80 mW × 9.26 ns     = 266.7 pJ
+
+6.2 Full SoC System (với NIOS II + SDRAM)
+───────────────────────────────────────────
+  Metric              │ Giá trị        │ % of Device
+  ────────────────────┼────────────────┼────────────
+  Logic Elements (LE) │ 5,869          │ 18%
+  Dedicated Registers │ 3,932          │ 12%
+  Memory bits         │ 277,504        │ 57%
+  Total Pins          │ 43             │ 9%
+  PLLs                │ 1              │ 25%
+
+6.3 Timing Analysis (SoC @ 100 MHz)
+──────────────────────────────────────
+  Clock                     │ Setup Slack │ Hold Slack │ Kết quả
+  ──────────────────────────┼─────────────┼────────────┼──────────
+  PLL c0 (100 MHz, system)  │ +0.925 ns   │ +0.391 ns  │ PASS ✓
+  CLOCK_50 (50 MHz)         │ +15.103 ns  │ +0.391 ns  │ PASS ✓
+
+  → Tất cả timing constraints đều met (slack dương)
+
+6.4 So sánh với bài báo tiêu biểu
+────────────────────────────────────
+  Tác giả             │ FPGA      │ LE/LUT │ Fmax    │ PSNR
+  ────────────────────┼───────────┼────────┼─────────┼────────
+  Sanchez et al.2012  │ Cyclone II│ 3,500  │  95 MHz │ ~27 dB
+  Bao et al. 2010     │ Virtex-5  │ 2,800  │ 120 MHz │ ~27 dB
+  Đề tài này          │ Cyclone II│ 3,073  │ 108 MHz │ 34.96 dB ★
+
+  ★ PSNR 34.96 dB cao hơn ~8 dB nhờ cơ chế switching (chỉ lọc pixel
+    nhiễu, giữ nguyên pixel sạch)
+
+
+────────────────────────────────────────────────────────────────────────────────
+7. CẤU TRÚC FILE DỰ ÁN
+────────────────────────────────────────────────────────────────────────────────
+
+  Verilog/
+  ├── median_filter_top.v         ← Top-level filter (switching logic)
+  ├── window3x3.v                 ← 3×3 sliding window với line buffer
+  ├── median_filter.v             ← 3-stage sorting network (19 comparators)
+  ├── sort3.v / max3.v / min3.v   ← Comparator primitives
+  ├── swap.v                      ← 2-element swap
+  ├── avalon_median_wrapper.v     ← Avalon-MM slave wrapper + FIFO
+  ├── avalon_median_wrapper_hw.tcl← Qsys component descriptor
+  ├── soc_top.v                   ← Top-level SoC (CLOCK_50 + DRAM pins)
+  ├── system.qsys                 ← Qsys system definition
+  ├── system.sopcinfo             ← Generated: address map, connections
+  ├── Median_Filter.sdc           ← Timing constraints (100 MHz + PLL)
+  ├── Median_Filter.qsf           ← Pin assignments (DE2 pinout)
+  ├── DE2_pin_assignments.csv     ← DE2 pinout reference
+  └── software/
+      └── Median_Filtter_App/
+          └── median_filter_main.c ← NIOS II application
+
+  Python/
+  ├── main.py                     ← Tạo ảnh nhiễu + golden reference
+  ├── noisy_to_hex.py             ← PNG → HEX cho testbench
+  ├── hex_to_img.py               ← HEX output → PNG
+  └── final.py                    ← So sánh golden vs hardware (PSNR)
+
+
+────────────────────────────────────────────────────────────────────────────────
+8. HƯỚNG DẪN CHẠY HỆ THỐNG
+────────────────────────────────────────────────────────────────────────────────
+
+8.1 Simulation (không cần board)
+──────────────────────────────────
+  # Bước 1: Tạo ảnh nhiễu
+  cd Python/
+  .venv/Scripts/python.exe main.py
+  .venv/Scripts/python.exe noisy_to_hex.py
+
+  # Bước 2: Compile và simulate Verilog
+  cd Verilog/
+  vlib work
+  vlog -work work swap.v sort3.v max3.v min3.v median_filter.v \
+       window3x3.v median_filter_top.v tb_switching_median.v
+  vsim -c work.tb_switching_median -do "run -all; quit -f"
+
+  # Bước 3: Verify kết quả
+  .venv/Scripts/python.exe hex_to_img.py
+  .venv/Scripts/python.exe final.py
+  # Kết quả: Max diff=0, PSNR=34.96 dB
+
+8.2 Hardware (cần DE2 board)
+──────────────────────────────
+  # Bước 1: Compile Quartus
+  quartus_sh --flow compile Median_Filter.qpf
+
+  # Bước 2: Nạp bitstream
+  quartus_pgm -m jtag -o "p;output_files/Median_Filter.sof"
+
+  # Bước 3: Build và nạp C code (Eclipse)
+  - Mở NIOS II SBT for Eclipse
+  - BSP project: trỏ đến system.sopcinfo
+  - App project: thêm median_filter_main.c
+  - Build → Run As NIOS II Hardware
+  - Xem kết quả trong Console (JTAG UART)
+
+
+────────────────────────────────────────────────────────────────────────────────
+9. LỖI ĐÃ GẶP VÀ CÁCH XỬ LÝ
+────────────────────────────────────────────────────────────────────────────────
+
+  Lỗi                           │ Nguyên nhân          │ Cách fix
+  ──────────────────────────────┼──────────────────────┼──────────────────────
+  .bss not within region        │ on-chip 32KB < 127KB │ Thêm SDRAM 8MB
+  Error 170040: 136 M4K needed  │ RAM 64KB > 105 M4K   │ Giảm RAM xuống 32KB
+  Fmax giảm 116→70 MHz          │ SDC constraint lỏng  │ SDC period 10ns(100M)
+  CLK1_PHASE_SHIFT=-83 (sai)    │ Nhập sai trong PLL   │ Sửa thành -3000 ps
+  DRAM_BA[0] sai pin            │ Pin csv ≠ manual      │ Dùng DE2_pin_csv
+  PLL c0 → clk_0.clk_in (vòng) │ Nối sai trong Qsys   │ Xóa, export clk đúng
+
+
+────────────────────────────────────────────────────────────────────────────────
+                              KẾT THÚC BÁO CÁO
+================================================================================

@@ -1,0 +1,36 @@
+D:/HOCTAP/CLAUDE/Verilog/tb_image_median.v {1 {vlog -work work D:/HOCTAP/CLAUDE/Verilog/tb_image_median.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module tb_image_median
+
+Top level modules:
+	tb_image_median
+
+} {} {}} D:/HOCTAP/CLAUDE/Verilog/sort3.v {1 {vlog -work work D:/HOCTAP/CLAUDE/Verilog/sort3.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module sort3
+
+Top level modules:
+	sort3
+
+} {} {}} D:/HOCTAP/CLAUDE/Verilog/swap.v {1 {vlog -work work D:/HOCTAP/CLAUDE/Verilog/swap.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module swap
+
+Top level modules:
+	swap
+
+} {} {}} D:/HOCTAP/CLAUDE/Verilog/tb_median_filter.v {1 {vlog -work work D:/HOCTAP/CLAUDE/Verilog/tb_median_filter.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module tb_median_filter
+
+Top level modules:
+	tb_median_filter
+
+} {} {}} D:/HOCTAP/CLAUDE/Verilog/tb_sort3.v {1 {vlog -work work D:/HOCTAP/CLAUDE/Verilog/tb_sort3.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module tb_sort3
+
+Top level modules:
+	tb_sort3
+
+} {} {}}

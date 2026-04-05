@@ -1,0 +1,117 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 64-Bit
+# Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+# Date created = 08:01:59  March 30, 2026
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		Median_Filter_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone II"
+set_global_assignment -name DEVICE EP2C35F672C6
+set_global_assignment -name TOP_LEVEL_ENTITY soc_top
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "08:01:59  MARCH 30, 2026"
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 672
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE FASTEST
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name VERILOG_FILE system/synthesis/system.v
+set_global_assignment -name QIP_FILE system/synthesis/system.qip
+set_global_assignment -name SDC_FILE Median_Filter.sdc
+set_global_assignment -name VERILOG_FILE avalon_median_wrapper.v
+set_global_assignment -name VERILOG_FILE window3x3.v
+set_global_assignment -name VERILOG_FILE tb_switching_median.v
+set_global_assignment -name VERILOG_FILE tb_sort3.v
+set_global_assignment -name VERILOG_FILE tb_median_filter.v
+set_global_assignment -name VERILOG_FILE tb_image_median_cascade.v
+set_global_assignment -name VERILOG_FILE tb_image_median.v
+set_global_assignment -name VERILOG_FILE swap.v
+set_global_assignment -name VERILOG_FILE sort3.v
+set_global_assignment -name VERILOG_FILE min3.v
+set_global_assignment -name VERILOG_FILE median_filter_top.v
+set_global_assignment -name VERILOG_FILE median_filter_cascade.v
+set_global_assignment -name VERILOG_FILE median_filter.v
+set_global_assignment -name VERILOG_FILE max3.v
+set_global_assignment -name VERILOG_FILE soc_top.v
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+# ---- SDRAM Pin Assignments (DE2, IS42S16400) ----
+set_location_assignment PIN_V4 -to DRAM_ADDR[0]
+set_location_assignment PIN_V3 -to DRAM_ADDR[1]
+set_location_assignment PIN_W2 -to DRAM_ADDR[2]
+set_location_assignment PIN_W1 -to DRAM_ADDR[3]
+set_location_assignment PIN_U3 -to DRAM_ADDR[4]
+set_location_assignment PIN_U4 -to DRAM_ADDR[5]
+set_location_assignment PIN_V1 -to DRAM_ADDR[6]
+set_location_assignment PIN_V2 -to DRAM_ADDR[7]
+set_location_assignment PIN_U1 -to DRAM_ADDR[8]
+set_location_assignment PIN_U2 -to DRAM_ADDR[9]
+set_location_assignment PIN_W4 -to DRAM_ADDR[10]
+set_location_assignment PIN_W3 -to DRAM_ADDR[11]
+set_location_assignment PIN_Y1 -to DRAM_ADDR[12]
+set_location_assignment PIN_Y2 -to DRAM_BA[0]
+set_location_assignment PIN_AA3 -to DRAM_BA[1]
+set_location_assignment PIN_AB3 -to DRAM_CAS_N
+set_location_assignment PIN_AA6 -to DRAM_CKE
+set_location_assignment PIN_AA1 -to DRAM_CLK
+set_location_assignment PIN_AB4 -to DRAM_CS_N
+set_location_assignment PIN_AA10 -to DRAM_DQ[0]
+set_location_assignment PIN_AB9 -to DRAM_DQ[1]
+set_location_assignment PIN_AA9 -to DRAM_DQ[2]
+set_location_assignment PIN_AB8 -to DRAM_DQ[3]
+set_location_assignment PIN_AA8 -to DRAM_DQ[4]
+set_location_assignment PIN_AB7 -to DRAM_DQ[5]
+set_location_assignment PIN_AA7 -to DRAM_DQ[6]
+set_location_assignment PIN_AB5 -to DRAM_DQ[7]
+set_location_assignment PIN_Y7 -to DRAM_DQ[8]
+set_location_assignment PIN_W7 -to DRAM_DQ[9]
+set_location_assignment PIN_AA4 -to DRAM_DQ[10]
+set_location_assignment PIN_AB10 -to DRAM_DQ[11]
+set_location_assignment PIN_Y5 -to DRAM_DQ[12]
+set_location_assignment PIN_Y4 -to DRAM_DQ[13]
+set_location_assignment PIN_Y3 -to DRAM_DQ[14]
+set_location_assignment PIN_AB11 -to DRAM_DQ[15]
+set_location_assignment PIN_AB2 -to DRAM_DQM[0]
+set_location_assignment PIN_AA5 -to DRAM_DQM[1]
+set_location_assignment PIN_AB1 -to DRAM_RAS_N
+set_location_assignment PIN_AA2 -to DRAM_WE_N
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"

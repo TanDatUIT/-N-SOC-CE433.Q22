@@ -1,0 +1,316 @@
+================================================================
+  HUONG DAN CHAY - SWITCHING MEDIAN FILTER 3x3 FPGA
+  Do An Mon SoC - CE433 UIT
+================================================================
+
+MUC LUC:
+  A. Cau truc file
+  B. Chay Simulation (ModelSim)
+  C. Tich hop Qsys (SoC voi NIOS II)
+  D. Code C mau cho NIOS II
+  E. Chay tu dong bang run_all.bat
+
+================================================================
+A. CAU TRUC FILE
+================================================================
+
+Verilog/
+├── swap.v                     -- Bo so sanh 2 gia tri (min/max)
+├── sort3.v                    -- Sap xep 3 gia tri (3 swap)
+├── max3.v                     -- Max cua 3 gia tri (2 comparator)
+├── min3.v                     -- Min cua 3 gia tri (2 comparator)
+├── median_filter.v            -- Pipeline 3 tang, 19 bo so sanh
+├── window3x3.v                -- Line buffer, trich cua so 3x3
+├── median_filter_top.v        -- TOP: window + pipeline + switching
+├── avalon_median_wrapper.v    -- Avalon-MM wrapper cho Qsys
+├── avalon_median_wrapper_hw.tcl -- Qsys component description
+├── tb_switching_median.v      -- Testbench chinh (streaming)
+└── huong_dan_chay.txt         -- File nay
+
+Python/
+├── main.py                    -- Tao anh nhieu + golden reference
+├── noisy_to_hex.py            -- PNG -> HEX cho testbench
+├── hex_to_img.py              -- HEX output -> PNG
+└── final.py                   -- So sanh Verilog vs Python golden
+
+Module hierarchy:
+  median_filter_top  (top-level synthesis)
+  ├── window3x3          (2 line buffer)
+  └── median_filter      (3-stage pipeline, 19 comparators)
+      ├── sort3 x4       (moi cai 3 swap)
+      │   └── swap x3
+      ├── max3 x1        (2 comparator)
+      └── min3 x1        (2 comparator)
+
+Thong so thiet ke:
+  - Anh: 256x256, 8-bit grayscale
+  - Output: 254x254 (bo 1 pixel vien moi canh)
+  - Pipeline latency: 3 clock cycle
+  - Throughput: 1 pixel/clock
+  - Tong bo so sanh: 19
+  - Switching: chi loc pixel = 0 hoac 255 (muoi tieu)
+
+================================================================
+B. CHAY SIMULATION (ModelSim)
+================================================================
+
+Yeu cau: ModelSim-Altera ASE
+Duong dan mac dinh: C:\altera\13.0sp1\modelsim_ase\win32aloem
+
+--- Buoc 1: Chuan bi anh dau vao ---
+
+  cd Python/
+  python main.py              # Tao noisy.png + golden
+  python noisy_to_hex.py      # Tao noisy_image.hex
+  copy noisy_image.hex ..\Verilog\
+
+--- Buoc 2: Compile Verilog ---
+
+  cd Verilog/
+  vlib work
+  vlog -work work swap.v sort3.v max3.v min3.v ^
+       median_filter.v window3x3.v median_filter_top.v ^
+       tb_switching_median.v
+
+--- Buoc 3: Chay simulation ---
+
+  vsim -c work.tb_switching_median -do "run -all; quit -f"
+
+  Ket qua: filtered.hex (254x254 = 64516 dong)
+
+--- Buoc 4: Kiem tra ket qua ---
+
+  copy filtered.hex ..\Python\
+  cd Python/
+  python hex_to_img.py        # Tao filtered_from_verilog.png
+  python final.py             # So sanh PSNR, tao diff.png
+
+  Ket qua mong doi:
+    - PSNR switching vs orig ~ 35 dB
+    - Pixel khac biet = 0 (Verilog khop Python golden)
+
+================================================================
+C. TICH HOP QSYS (SoC VOI NIOS II)
+================================================================
+
+--- Buoc 1: Them IP vao Qsys ---
+
+  1. Mo Quartus > Tools > Qsys (Platform Designer)
+  2. Menu: File > New Component
+     HOAC: Component Library > dau "+" > chon duong dan
+     toi file "avalon_median_wrapper_hw.tcl"
+  3. Component "Switching Median Filter 3x3" se xuat hien
+     trong muc "Image Processing"
+
+--- Buoc 2: Xay dung he thong SoC ---
+
+  Them cac component sau vao Qsys:
+
+  +--------------------------------------------------+
+  | Clk Source (50 MHz)                               |
+  +--------------------------------------------------+
+          |
+  +--------------------------------------------------+
+  | NIOS II/e (hoac /f)                               |
+  |   - Reset vector: onchip_mem                      |
+  |   - Exception vector: onchip_mem                  |
+  +--------------------------------------------------+
+          |  Avalon-MM Master
+          |
+  +-------+---+---+---+---+--------------------------+
+  |       |   |   |   |   |                          |
+  v       v   v   v   v   v                          |
+  On-chip JTAG  Sys  Timer PIO    Median_Filter      |
+  Memory  UART  ID         (LED)  (avalon_median)    |
+  64KB                                                |
+  +--------------------------------------------------+
+
+  Ket noi:
+  - clk, reset cho tat ca component
+  - NIOS II data_master -> tat ca slave
+  - NIOS II instr_master -> onchip_mem
+  - median_filter.irq -> NIOS II irq
+
+--- Buoc 3: Gan dia chi ---
+
+  Qsys > System > Assign Base Addresses (tu dong)
+  Hoac gan thu cong:
+    onchip_mem:     0x00000000
+    jtag_uart:      0x00010000
+    sysid:          0x00010020
+    timer:          0x00010040
+    median_filter:  0x00010080
+
+--- Buoc 4: Generate HDL ---
+
+  Qsys > Generate > Generate HDL
+  Chon: Verilog, Synthesis + Simulation
+  -> Tao file qsys_system.qip
+
+--- Buoc 5: Top-level Quartus ---
+
+  Tao file top-level ket noi Qsys system voi pin FPGA:
+
+    module top_de2_115 (
+        input        CLOCK_50,
+        input  [0:0] KEY,       // KEY[0] = reset
+        output [7:0] LEDG       // debug
+    );
+        qsys_system u0 (
+            .clk_clk       (CLOCK_50),
+            .reset_reset_n (KEY[0]),
+            .pio_led_export(LEDG)
+        );
+    endmodule
+
+--- Buoc 6: Compile + Program ---
+
+  quartus_sh --flow compile my_project
+  quartus_pgm -c 1 -m JTAG -o "P;output_files/my_project.sof"
+
+================================================================
+D. CODE C MAU CHO NIOS II
+================================================================
+
+// median_filter_nios.c
+// Chay trong Eclipse NIOS II SBT
+
+#include "system.h"
+#include "altera_avalon_jtag_uart.h"
+#include <io.h>
+#include <stdio.h>
+
+// Register offsets (word address)
+#define REG_DATA    0   // W: pixel_in, R: pixel_out
+#define REG_STATUS  1   // R: [0] not_empty, [1] full, [8] done
+#define REG_CONTROL 2   // W: [0] soft_reset
+#define REG_COUNT   3   // R: so pixel output
+
+#define IMG_W 256
+#define IMG_H 256
+#define OUT_W (IMG_W - 2)
+#define OUT_H (IMG_H - 2)
+#define OUT_SIZE (OUT_W * OUT_H)
+
+// Anh mau de test (hoac load tu SDRAM/flash)
+static unsigned char input_img[IMG_W * IMG_H];
+static unsigned char output_img[OUT_SIZE];
+
+int main()
+{
+    int i;
+    unsigned int base = MEDIAN_FILTER_BASE;  // tu system.h
+
+    printf("=== Switching Median Filter SoC Demo ===\n");
+
+    // Buoc 1: Soft reset
+    IOWR_32DIRECT(base, REG_CONTROL * 4, 1);
+    IOWR_32DIRECT(base, REG_CONTROL * 4, 0);
+
+    // Buoc 2: Nap anh test vao input_img[]
+    // (Co the doc tu JTAG UART hoac hardcode)
+    for (i = 0; i < IMG_W * IMG_H; i++) {
+        input_img[i] = (unsigned char)(i & 0xFF);
+    }
+
+    // Buoc 3: Ghi tung pixel vao filter
+    printf("Dang ghi %d pixel...\n", IMG_W * IMG_H);
+    for (i = 0; i < IMG_W * IMG_H; i++) {
+        IOWR_32DIRECT(base, REG_DATA * 4, input_img[i]);
+
+        // Doc output neu FIFO co du lieu (tranh tran)
+        while (IORD_32DIRECT(base, REG_STATUS * 4) & 0x02) {
+            // FIFO full -> doc bot
+            unsigned int status = IORD_32DIRECT(base, REG_STATUS * 4);
+            if (status & 0x01) {  // not empty
+                int idx = IORD_32DIRECT(base, REG_COUNT * 4) - 1;
+                if (idx >= 0 && idx < OUT_SIZE)
+                    output_img[idx] = IORD_32DIRECT(base, REG_DATA * 4);
+            }
+        }
+    }
+
+    // Buoc 4: Doc het output con lai
+    printf("Dang doc output...\n");
+    int read_count = 0;
+    while (read_count < OUT_SIZE) {
+        unsigned int status = IORD_32DIRECT(base, REG_STATUS * 4);
+        if (status & 0x01) {  // FIFO not empty
+            output_img[read_count] = IORD_32DIRECT(base, REG_DATA * 4);
+            read_count++;
+        }
+
+        // Kiem tra done
+        if ((status >> 8) & 0x01) {
+            // Da xu ly xong, doc het FIFO
+            while (IORD_32DIRECT(base, REG_STATUS * 4) & 0x01) {
+                if (read_count < OUT_SIZE) {
+                    output_img[read_count] = IORD_32DIRECT(base, REG_DATA * 4);
+                    read_count++;
+                } else break;
+            }
+            break;
+        }
+    }
+
+    printf("Hoan thanh! Doc duoc %d pixel output\n", read_count);
+
+    // Buoc 5: Xuat ket qua qua JTAG UART (hex dump)
+    printf("Output (20 pixel dau):\n");
+    for (i = 0; i < 20 && i < read_count; i++) {
+        printf("%02X ", output_img[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+================================================================
+E. CHAY TU DONG BANG run_all.bat
+================================================================
+
+File: run_all.bat (tai thu muc goc)
+
+Yeu cau:
+  - ModelSim: C:\altera\13.0sp1\modelsim_ase\win32aloem
+  - Python venv: Python\.venv\ (co torch, numpy, opencv, matplotlib)
+
+Chay:
+  Nhan doi vao run_all.bat hoac cmd:
+  > run_all.bat
+
+Trinh tu tu dong:
+  [1/5] main.py        - Tao anh nhieu + golden reference
+  [2/5] noisy_to_hex   - Convert PNG -> HEX
+  [3/5] vlog compile   - Compile tat ca module Verilog
+  [4/5] vsim           - Chay simulation tb_switching_median
+  [5/5] hex_to_img     - Convert HEX -> PNG + so sanh PSNR
+        final.py
+
+Ket qua:
+  Python/noisy.png                  - Anh nhieu
+  Python/golden_switching.png       - Golden reference (Python)
+  Python/filtered_from_verilog.png  - Ket qua tu Verilog
+  Python/diff.png                   - Anh sai khac
+
+================================================================
+LUU Y
+================================================================
+
+1. Neu ModelSim bao loi "noisy_image.hex not found":
+   -> Dam bao copy file hex tu Python/ sang Verilog/ truoc khi sim
+
+2. Neu filtered.hex co 0 dong:
+   -> Kiem tra reset (rst_n phai len 1 sau reset)
+   -> Kiem tra thoi gian sim du lon (#10000000 trong TB)
+
+3. Neu PSNR thap (< 30 dB):
+   -> Kiem tra switching logic (chi loc pixel 0 hoac 255)
+   -> Kiem tra pipeline delay center pixel (3 clock)
+
+4. Khi tich hop Qsys:
+   -> File _hw.tcl phai cung thu muc voi cac file .v
+   -> Sau khi Generate HDL, them file .qip vao Quartus project
+   -> Nho gan dia chi co so (base address) cho median_filter
+
+================================================================

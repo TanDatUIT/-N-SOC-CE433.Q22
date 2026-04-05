@@ -1,0 +1,13 @@
+# vsim -do {run -all; quit -f} -c work.tb_switching_median 
+# Loading work.tb_switching_median
+# Loading work.median_filter_top
+# Loading work.window3x3
+# Loading work.median_filter
+# Loading work.sort3
+# Loading work.swap
+# Loading work.max3
+# Loading work.min3
+# run -all 
+# Output pixels: 64516 (expected 64516)
+# ** Note: $finish    : tb_switching_median.v(92)
+#    Time: 10000020 ns  Iteration: 0  Instance: /tb_switching_median

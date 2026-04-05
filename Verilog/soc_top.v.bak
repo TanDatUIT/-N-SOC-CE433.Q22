@@ -1,0 +1,11 @@
+module soc_top (
+	input wire CLOCK_50,
+	input wire [3:0] KEY
+);
+system uut(
+ .clk ( CLOCK_50),
+.reset_n (KEY[0])
+);
+
+
+endmodule 
